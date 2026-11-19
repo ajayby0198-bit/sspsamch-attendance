@@ -1,0 +1,298 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background:
+      radial-gradient(1100px 580px at 10% -8%, rgba(20, 83, 60, 0.08), transparent 60%),
+      radial-gradient(900px 520px at 92% 2%, rgba(180, 123, 43, 0.09), transparent 55%),
+      linear-gradient(180deg, #fbf8f2 0%, #f4ede0 100%);
+    color: #1c1917;
+    min-height: 100vh;
+  }
+
+  h1, h2, .font-display {
+    font-family: var(--font-display);
+  }
+}
+
+@layer components {
+  .surface-3d {
+    background: linear-gradient(180deg, #fffdf9 0%, #f8f2e7 100%);
+    border: 1px solid rgba(180, 152, 108, 0.34);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.96),
+      inset 0 -1px 0 0 rgba(168, 140, 96, 0.14),
+      0 3px 6px -2px rgba(28, 25, 23, 0.06),
+      0 14px 28px -10px rgba(20, 56, 41, 0.12),
+      0 2px 0 0 rgba(180, 152, 108, 0.28);
+  }
+
+  .surface-3d-interactive {
+    background: linear-gradient(180deg, #fffdf9 0%, #f8f2e7 100%);
+    border: 1px solid rgba(180, 152, 108, 0.36);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.96),
+      inset 0 -1px 0 0 rgba(168, 140, 96, 0.15),
+      0 4px 8px -2px rgba(28, 25, 23, 0.06),
+      0 14px 28px -10px rgba(20, 56, 41, 0.12),
+      0 3px 0 0 rgba(180, 152, 108, 0.3);
+    transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms ease;
+    will-change: transform;
+  }
+
+  .surface-3d-interactive:hover {
+    transform: perspective(1000px) translateY(-3px) rotateX(1deg);
+    border-color: rgba(20, 83, 60, 0.48);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 1),
+      0 10px 18px -4px rgba(28, 25, 23, 0.09),
+      0 22px 38px -12px rgba(20, 56, 41, 0.19),
+      0 4px 0 0 rgba(20, 83, 60, 0.22);
+  }
+
+  .surface-3d-dark {
+    background: linear-gradient(160deg, #163d2e 0%, #0d281e 58%, #071a13 100%);
+    border: 1px solid rgba(212, 168, 83, 0.26);
+    box-shadow:
+      inset 0 1px 0 0 rgba(212, 168, 83, 0.22),
+      0 18px 40px -12px rgba(7, 26, 19, 0.55),
+      0 3px 0 0 rgba(5, 18, 13, 0.78);
+  }
+
+  .surface-3d-inset {
+    background: linear-gradient(180deg, #f3ebdc 0%, #faf5ec 100%);
+    border: 1px solid rgba(180, 152, 108, 0.3);
+    box-shadow: inset 0 2px 5px rgba(28, 25, 23, 0.06);
+  }
+
+  .btn-3d {
+    background: linear-gradient(180deg, #196146 0%, #114732 100%);
+    border: 1px solid #0d3a29;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.24),
+      0 3px 0 0 #07281c,
+      0 8px 16px -4px rgba(17, 71, 50, 0.38);
+    transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-3d:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.3),
+      0 4px 0 0 #07281c,
+      0 12px 20px -5px rgba(17, 71, 50, 0.45);
+  }
+
+  .btn-3d:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.14),
+      0 1px 0 0 #07281c,
+      0 2px 6px -1px rgba(17, 71, 50, 0.3);
+  }
+
+  .btn-3d-gold {
+    background: linear-gradient(180deg, #c98f32 0%, #a56d1c 100%);
+    border: 1px solid #8a5812;
+    color: #fffdf9;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 248, 225, 0.36),
+      0 3px 0 0 #6e440b,
+      0 8px 16px -4px rgba(140, 88, 18, 0.36);
+    transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-3d-gold:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .btn-3d-gold:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 248, 225, 0.2),
+      0 1px 0 0 #6e440b;
+  }
+
+  .btn-3d-danger {
+    background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%);
+    border: 1px solid #7f1d1d;
+    color: #fff;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.22),
+      0 3px 0 0 #5c1111,
+      0 6px 14px -3px rgba(127, 29, 29, 0.34);
+    transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-3d-danger:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .btn-3d-danger:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.14),
+      0 1px 0 0 #5c1111;
+  }
+
+  .btn-3d-secondary {
+    background: linear-gradient(180deg, #fffdf9 0%, #f5ede0 100%);
+    border: 1px solid rgba(180, 152, 108, 0.45);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 1),
+      0 2px 0 0 rgba(168, 140, 96, 0.55),
+      0 4px 10px -3px rgba(28, 25, 23, 0.08);
+    transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-3d-secondary:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .btn-3d-secondary:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+      0 1px 0 0 rgba(168, 140, 96, 0.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface-3d-interactive:hover,
+  .btn-3d:hover,
+  .btn-3d:active,
+  .btn-3d-gold:hover,
+  .btn-3d-gold:active,
+  .btn-3d-danger:hover,
+  .btn-3d-danger:active,
+  .btn-3d-secondary:hover,
+  .btn-3d-secondary:active {
+    transform: none;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Nocturnal Ayurvedic Herbarium Dark Mode Overrides */
+html.dark body {
+  background:
+    radial-gradient(1100px 580px at 10% -8%, rgba(25, 97, 70, 0.24), transparent 60%),
+    radial-gradient(900px 520px at 92% 2%, rgba(201, 143, 50, 0.14), transparent 55%),
+    linear-gradient(180deg, #09130f 0%, #0f1d17 100%);
+  color: #f3ece0;
+}
+
+html.dark header {
+  background-color: rgba(14, 30, 23, 0.94) !important;
+  border-color: rgba(212, 168, 83, 0.22) !important;
+}
+
+html.dark .surface-3d,
+html.dark .surface-3d-interactive {
+  background: linear-gradient(180deg, #13251d 0%, #0e1c16 100%);
+  border-color: rgba(212, 168, 83, 0.24);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 248, 225, 0.06),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.35),
+    0 6px 14px -4px rgba(0, 0, 0, 0.55),
+    0 2px 0 0 rgba(7, 17, 13, 0.85);
+}
+
+html.dark .surface-3d-inset {
+  background: linear-gradient(180deg, #0b1611 0%, #102019 100%);
+  border-color: rgba(212, 168, 83, 0.2);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+html.dark .btn-3d-secondary {
+  background: linear-gradient(180deg, #172e24 0%, #11231b 100%);
+  border-color: rgba(212, 168, 83, 0.28);
+  color: #f3ece0;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 248, 225, 0.08),
+    0 2px 0 0 rgba(5, 13, 10, 0.8);
+}
+
+html.dark .bg-white,
+html.dark .bg-white\/95,
+html.dark .bg-white\/90,
+html.dark .bg-white\/85,
+html.dark .bg-white\/80,
+html.dark .bg-white\/70,
+html.dark .bg-\[\#FFFDF9\],
+html.dark .bg-\[\#FAF6EE\],
+html.dark .bg-\[\#FBF8F2\],
+html.dark .bg-\[\#F3EAD8\],
+html.dark .bg-slate-50,
+html.dark .bg-slate-100 {
+  background-color: #13251d !important;
+  color: #f3ece0;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #0b1611 !important;
+  color: #f5efe4 !important;
+  border-color: rgba(212, 168, 83, 0.28) !important;
+}
+
+html.dark table thead tr,
+html.dark table thead.sticky {
+  background-color: #172d23 !important;
+  color: #e8decb !important;
+}
+
+html.dark .text-stone-950,
+html.dark .text-stone-900,
+html.dark .text-slate-900,
+html.dark .text-stone-800,
+html.dark .text-slate-800 {
+  color: #f4ede0 !important;
+}
+
+html.dark .text-stone-700,
+html.dark .text-slate-700,
+html.dark .text-stone-600,
+html.dark .text-slate-600 {
+  color: #d6cdbc !important;
+}
+
+html.dark .text-stone-500,
+html.dark .text-slate-500 {
+  color: #b4aa97 !important;
+}
+
+html.dark .text-emerald-950,
+html.dark .text-emerald-900,
+html.dark .text-emerald-800 {
+  color: #6ee7b7 !important;
+}
+
+html.dark .text-amber-900,
+html.dark .text-amber-800,
+html.dark .text-amber-700 {
+  color: #fcd34d !important;
+}
+
+html.dark .text-red-800,
+html.dark .text-red-700 {
+  color: #fca5a5 !important;
+}
+
+html.dark .border-slate-200,
+html.dark .border-slate-100,
+html.dark .border-amber-900\/15,
+html.dark .border-amber-900\/20 {
+  border-color: rgba(212, 168, 83, 0.22) !important;
+}
+

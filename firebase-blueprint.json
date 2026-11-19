@@ -1,0 +1,456 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user role, email, permissions checklist, auto-generated access code verification, and academic profile.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "maxLength": 160 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "role": { "type": "string", "enum": ["admin", "co_admin", "principal", "teacher", "student", "parent"] },
+        "requestedRole": { "type": "string", "enum": ["admin", "co_admin", "principal", "teacher", "student", "parent"] },
+        "approvalStatus": { "type": "string", "enum": ["active", "pending", "rejected", "blocked"] },
+        "permissions": { "type": "array" },
+        "accessCode": { "type": "string", "maxLength": 24 },
+        "accessCodeVerified": { "type": "boolean" },
+        "inviteId": { "type": "string", "maxLength": 128 },
+        "profYear": { "type": "string", "maxLength": 40 },
+        "department": { "type": "string", "maxLength": 80 },
+        "rollOrEmpId": { "type": "string", "maxLength": 40 },
+        "avatarUrl": { "type": "string", "maxLength": 300 },
+        "customRoleId": { "type": "string", "maxLength": 64 },
+        "customRoleName": { "type": "string", "maxLength": 64 },
+        "profileLockEnabled": { "type": "boolean" },
+        "profileLockPin": { "type": "string", "maxLength": 24 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "uid", "email", "displayName", "role", "requestedRole", "approvalStatus",
+        "permissions", "accessCode", "accessCodeVerified", "inviteId",
+        "profYear", "department", "rollOrEmpId", "avatarUrl", "createdAt", "updatedAt"
+      ]
+    },
+    "AccessInvite": {
+      "title": "AccessInvite",
+      "description": "Admin pre-authorized institutional email invite with role, granular permission list, and auto-generated access password.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "role": { "type": "string", "enum": ["co_admin", "principal", "teacher", "student", "parent"] },
+        "profYear": { "type": "string", "maxLength": 40 },
+        "department": { "type": "string", "maxLength": 80 },
+        "rollOrEmpId": { "type": "string", "maxLength": 40 },
+        "permissions": { "type": "array" },
+        "accessCode": { "type": "string", "minLength": 4, "maxLength": 24 },
+        "status": { "type": "string", "enum": ["invited", "claimed", "revoked"] },
+        "customRoleId": { "type": "string", "maxLength": 64 },
+        "customRoleName": { "type": "string", "maxLength": 64 },
+        "createdByUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "email", "displayName", "role", "profYear", "department", "rollOrEmpId",
+        "permissions", "accessCode", "status", "createdByUid", "createdAt", "updatedAt"
+      ]
+    },
+    "MasterConfig": {
+      "title": "MasterConfig",
+      "description": "Admin-managed master lists for attendance options, session types, activity options, BAMS prof batches, and departments.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "institutionId": { "type": "string", "enum": ["bams-ayurveda"] },
+        "sessionTypes": { "type": "array" },
+        "activityTypes": { "type": "array" },
+        "attendanceOptions": { "type": "array" },
+        "profYears": { "type": "array" },
+        "departments": { "type": "array" },
+        "customSections": { "type": "array" },
+        "customRoles": { "type": "array" },
+        "profileMenuLinks": { "type": "array" },
+        "profileHiddenTabs": { "type": "array" },
+        "timetableActive": { "type": "boolean" },
+        "timetableEntries": { "type": "array" },
+        "geoFenceEnabled": { "type": "boolean" },
+        "campusLat": { "type": "number" },
+        "campusLng": { "type": "number" },
+        "campusRadiusMeters": { "type": "number" },
+        "targetExamDate": { "type": "string", "maxLength": 20 },
+        "minAttendanceThreshold": { "type": "number" },
+        "updatedBy": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "institutionId", "sessionTypes", "activityTypes", "attendanceOptions",
+        "profYears", "departments", "minAttendanceThreshold", "updatedBy", "updatedAt"
+      ]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Isolated PII document for user email and institutional contact.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "phone", "updatedAt"]
+    },
+    "TeacherProfile": {
+      "title": "TeacherProfile",
+      "description": "BAMS faculty member profile with department, qualifications, and session metrics.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "fullName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "designation": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "department": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "qualification": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "employeeCode": { "type": "string", "minLength": 2, "maxLength": 30 },
+        "officeHours": { "type": "string", "maxLength": 100 },
+        "bio": { "type": "string", "maxLength": 500 },
+        "avatarUrl": { "type": "string", "maxLength": 300 },
+        "assignedSubjects": { "type": "array" },
+        "weeklyHours": { "type": "number" },
+        "sessionsSubmitted": { "type": "number" },
+        "sessionsDraft": { "type": "number" },
+        "avgAttendanceRate": { "type": "number" },
+        "institutionId": { "type": "string", "enum": ["bams-ayurveda"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "ownerUid", "fullName", "designation", "department", "qualification",
+        "employeeCode", "officeHours", "bio", "avatarUrl", "assignedSubjects",
+        "weeklyHours", "sessionsSubmitted", "sessionsDraft", "avgAttendanceRate",
+        "institutionId", "createdAt", "updatedAt"
+      ]
+    },
+    "Subject": {
+      "title": "Subject",
+      "description": "BAMS curriculum subject with NCISM required theory and practical/clinical hours.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "code": { "type": "string", "minLength": 2, "maxLength": 24 },
+        "name": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "department": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "profYear": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "requiredTheoryHours": { "type": "number" },
+        "requiredPracticalHours": { "type": "number" },
+        "deliveredHours": { "type": "number" },
+        "teacherId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "teacherName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "institutionId": { "type": "string", "enum": ["bams-ayurveda"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "code", "name", "department", "profYear", "requiredTheoryHours",
+        "requiredPracticalHours", "deliveredHours", "teacherId", "teacherName",
+        "institutionId", "createdAt", "updatedAt"
+      ]
+    },
+    "StudentRecord": {
+      "title": "StudentRecord",
+      "description": "BAMS student academic roster entry with cumulative hours attended (no PII).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "rollNumber": { "type": "string", "minLength": 2, "maxLength": 32 },
+        "fullName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "profYear": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "batch": { "type": "string", "minLength": 2, "maxLength": 20 },
+        "totalHoursScheduled": { "type": "number" },
+        "totalHoursAttended": { "type": "number" },
+        "theoryHoursAttended": { "type": "number" },
+        "practicalHoursAttended": { "type": "number" },
+        "attendancePercent": { "type": "number" },
+        "consecutiveAbsences": { "type": "number" },
+        "standing": { "type": "string", "enum": ["nominal", "warning", "critical"] },
+        "staffUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "uid", "rollNumber", "fullName", "profYear", "batch",
+        "totalHoursScheduled", "totalHoursAttended", "theoryHoursAttended",
+        "practicalHoursAttended", "attendancePercent", "consecutiveAbsences",
+        "standing", "staffUids", "createdAt", "updatedAt"
+      ]
+    },
+    "AttendanceSession": {
+      "title": "AttendanceSession",
+      "description": "Hourly BAMS class attendance session with topic taught, activity type, entry mode, draft saving, and final submission.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "teacherUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "teacherId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "teacherName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "subjectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "subjectCode": { "type": "string", "minLength": 2, "maxLength": 24 },
+        "subjectName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "profYear": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "batchLabel": { "type": "string", "maxLength": 60 },
+        "sessionType": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "activityType": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "topicTaught": { "type": "string", "maxLength": 160 },
+        "entryMode": { "type": "string", "enum": ["live", "paper_backup"] },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "startTime": { "type": "string", "minLength": 4, "maxLength": 10 },
+        "endTime": { "type": "string", "minLength": 4, "maxLength": 10 },
+        "durationHours": { "type": "number" },
+        "room": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "status": { "type": "string", "enum": ["draft", "submitted"] },
+        "allowStudentSelfMark": { "type": "boolean" },
+        "checkInCode": { "type": "string", "minLength": 4, "maxLength": 12 },
+        "qrRotatingEnabled": { "type": "boolean" },
+        "geoFenceRequired": { "type": "boolean" },
+        "presentCount": { "type": "number" },
+        "lateCount": { "type": "number" },
+        "absentCount": { "type": "number" },
+        "totalStudents": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 300 },
+        "staffUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "teacherUid", "teacherId", "teacherName", "subjectId", "subjectCode",
+        "subjectName", "profYear", "sessionType", "activityType", "topicTaught", "entryMode",
+        "date", "startTime", "endTime", "durationHours", "room", "status",
+        "allowStudentSelfMark", "checkInCode", "presentCount", "lateCount",
+        "absentCount", "totalStudents", "notes", "staffUids", "createdAt", "updatedAt"
+      ]
+    },
+    "SessionStudentRecord": {
+      "title": "SessionStudentRecord",
+      "description": "Per-student attendance entry within a specific class session.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "studentUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "rollNumber": { "type": "string", "minLength": 2, "maxLength": 32 },
+        "studentName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "status": { "type": "string", "enum": ["present", "late", "absent"] },
+        "creditedHours": { "type": "number" },
+        "selfCheckedIn": { "type": "boolean" },
+        "checkInTime": { "type": "string", "maxLength": 20 },
+        "remarks": { "type": "string", "maxLength": 200 },
+        "teacherUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "staffUids": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "studentId", "studentUid", "rollNumber", "studentName", "status",
+        "creditedHours", "selfCheckedIn", "checkInTime", "remarks",
+        "teacherUid", "staffUids", "updatedAt"
+      ]
+    },
+    "StudentCheckIn": {
+      "title": "StudentCheckIn",
+      "description": "Verified student self check-in request for an open draft session.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "rollNumber": { "type": "string", "minLength": 2, "maxLength": 32 },
+        "studentName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "checkInCode": { "type": "string", "minLength": 4, "maxLength": 12 },
+        "teacherUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "staffUids": { "type": "array" },
+        "checkedInAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "studentId", "rollNumber", "studentName", "checkInCode", "teacherUid", "staffUids", "checkedInAt"]
+    },
+    "AttendanceAlert": {
+      "title": "AttendanceAlert",
+      "description": "Automated absenteeism and draft compliance alert.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "type": { "type": "string", "enum": ["low_attendance", "consecutive_absence", "draft_pending"] },
+        "severity": { "type": "string", "enum": ["warning", "critical"] },
+        "targetStudentId": { "type": "string", "maxLength": 128 },
+        "targetStudentUid": { "type": "string", "maxLength": 128 },
+        "targetName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "profYear": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "subjectCode": { "type": "string", "maxLength": 24 },
+        "attendancePercent": { "type": "number" },
+        "message": { "type": "string", "minLength": 5, "maxLength": 280 },
+        "resolved": { "type": "boolean" },
+        "resolvedBy": { "type": "string", "maxLength": 100 },
+        "staffUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "type", "severity", "targetStudentId", "targetStudentUid",
+        "targetName", "profYear", "subjectCode", "attendancePercent",
+        "message", "resolved", "resolvedBy", "staffUids", "createdAt", "updatedAt"
+      ]
+    },
+    "InteractionLog": {
+      "title": "InteractionLog",
+      "description": "Real-time user interaction and audit trail telemetry.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "actorUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "actorName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "actorRole": { "type": "string", "enum": ["admin", "co_admin", "principal", "teacher", "student", "parent"] },
+        "actionType": {
+          "type": "string",
+          "enum": [
+            "draft_saved",
+            "session_submitted",
+            "student_checkin",
+            "alert_resolved",
+            "role_updated",
+            "correction_audit",
+            "resource_published",
+            "feedback_submitted",
+            "admin_attendance_adjust",
+            "request_rejected",
+            "invite_created",
+            "master_updated",
+            "user_blocked",
+            "user_unblocked",
+            "subject_reassigned"
+          ]
+        },
+        "label": { "type": "string", "minLength": 2, "maxLength": 180 },
+        "hourBucket": { "type": "string", "minLength": 2, "maxLength": 12 },
+        "staffUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "actorUid", "actorName", "actorRole", "actionType", "label", "hourBucket", "staffUids", "createdAt"]
+    },
+    "LearningResource": {
+      "title": "LearningResource",
+      "description": "Learning repository item (Notes, Test Papers, Internal Marks, College Notifications).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "category": { "type": "string", "enum": ["notes", "test_paper", "marks", "notification"] },
+        "profYear": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "subjectCode": { "type": "string", "maxLength": 24 },
+        "description": { "type": "string", "minLength": 2, "maxLength": 400 },
+        "scoreSummary": { "type": "string", "maxLength": 100 },
+        "authorUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "institutionId": { "type": "string", "enum": ["bams-ayurveda"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "title", "category", "profYear", "subjectCode", "description",
+        "scoreSummary", "authorUid", "authorName", "institutionId", "createdAt", "updatedAt"
+      ]
+    },
+    "FeedbackItem": {
+      "title": "FeedbackItem",
+      "description": "Portal feedback and continuous improvement suggestions.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "authorRole": { "type": "string", "enum": ["admin", "co_admin", "principal", "teacher", "student", "parent"] },
+        "category": { "type": "string", "enum": ["Usability", "Attendance", "Academic", "Resources"] },
+        "message": { "type": "string", "minLength": 5, "maxLength": 400 },
+        "status": { "type": "string", "enum": ["submitted", "reviewed", "implemented"] },
+        "staffUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "authorUid", "authorName", "authorRole", "category", "message", "status", "staffUids", "createdAt", "updatedAt"]
+    },
+    "LeaveRequest": {
+      "title": "LeaveRequest",
+      "description": "Student Medical or Duty Leave condonation request with approval status.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "studentId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "studentUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "rollNumber": { "type": "string", "minLength": 2, "maxLength": 32 },
+        "studentName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "profYear": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "batch": { "type": "string", "minLength": 2, "maxLength": 20 },
+        "leaveType": { "type": "string", "enum": ["medical", "duty_nss", "academic_seminar", "sports_cultural"] },
+        "startDate": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "endDate": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "hoursClaimed": { "type": "number" },
+        "reason": { "type": "string", "minLength": 4, "maxLength": 300 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "reviewedBy": { "type": "string", "maxLength": 128 },
+        "reviewedByName": { "type": "string", "maxLength": 100 },
+        "staffUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "studentId", "studentUid", "rollNumber", "studentName", "profYear", "batch",
+        "leaveType", "startDate", "endDate", "hoursClaimed", "reason", "status",
+        "reviewedBy", "reviewedByName", "staffUids", "createdAt", "updatedAt"
+      ]
+    },
+    "ClinicalRotation": {
+      "title": "ClinicalRotation",
+      "description": "BAMS OPD/IPD hospital ward rotation posting for clinical batches.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "profYear": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "batch": { "type": "string", "minLength": 2, "maxLength": 20 },
+        "groupLabel": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "wardName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "department": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "supervisorName": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "startDate": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "endDate": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "status": { "type": "string", "enum": ["scheduled", "active", "completed"] },
+        "sessionsLogged": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 240 },
+        "institutionId": { "type": "string", "enum": ["bams-ayurveda"] },
+        "staffUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "profYear", "batch", "groupLabel", "wardName", "department",
+        "supervisorName", "startDate", "endDate", "status", "sessionsLogged",
+        "notes", "institutionId", "staffUids", "createdAt", "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": { "$ref": "#/entities/UserProfile" }, "description": "User RBAC profiles with permissions & auto-generated access code." },
+    "/users/{userId}/private/{docId}": { "schema": { "$ref": "#/entities/UserPrivateInfo" }, "description": "Isolated PII." },
+    "/accessInvites/{inviteId}": { "schema": { "$ref": "#/entities/AccessInvite" }, "description": "Pre-authorized institutional email invites with permissions & access code." },
+    "/masterConfig/{configId}": { "schema": { "$ref": "#/entities/MasterConfig" }, "description": "Master lists for attendance options, session types, activities, prof years, departments, and Smart Hub settings." },
+    "/teachers/{teacherId}": { "schema": { "$ref": "#/entities/TeacherProfile" }, "description": "BAMS faculty directory." },
+    "/subjects/{subjectId}": { "schema": { "$ref": "#/entities/Subject" }, "description": "BAMS curriculum subjects." },
+    "/students/{studentId}": { "schema": { "$ref": "#/entities/StudentRecord" }, "description": "BAMS student attendance standings." },
+    "/attendanceSessions/{sessionId}": { "schema": { "$ref": "#/entities/AttendanceSession" }, "description": "Class sessions with topic, activity, entryMode, QR/Geo flags, draft and submitted states." },
+    "/attendanceSessions/{sessionId}/records/{studentId}": { "schema": { "$ref": "#/entities/SessionStudentRecord" }, "description": "Per-student hourly session entries." },
+    "/attendanceSessions/{sessionId}/checkIns/{uid}": { "schema": { "$ref": "#/entities/StudentCheckIn" }, "description": "Student self check-ins." },
+    "/alerts/{alertId}": { "schema": { "$ref": "#/entities/AttendanceAlert" }, "description": "Absenteeism and compliance alerts." },
+    "/interactionLogs/{logId}": { "schema": { "$ref": "#/entities/InteractionLog" }, "description": "Real-time interaction & audit logs." },
+    "/learningResources/{resourceId}": { "schema": { "$ref": "#/entities/LearningResource" }, "description": "Learning repository: notes, test papers, marks, notifications." },
+    "/feedbackItems/{feedbackId}": { "schema": { "$ref": "#/entities/FeedbackItem" }, "description": "Portal feedback & continuous improvement items." },
+    "/leaveRequests/{leaveId}": { "schema": { "$ref": "#/entities/LeaveRequest" }, "description": "Medical & Duty leave condonation requests." },
+    "/clinicalRotations/{rotationId}": { "schema": { "$ref": "#/entities/ClinicalRotation" }, "description": "Hospital OPD/IPD posting rotations for clinical batches." }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Dhanvantari BAMS Attendance & Analytics",
+  "description": "Real-time BAMS hours-wise attendance tracking, teacher draft/submit registers, faculty profiles, automated absenteeism alerts, and role-based analytics dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
